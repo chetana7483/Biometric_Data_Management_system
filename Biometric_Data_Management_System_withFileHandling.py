@@ -1,5 +1,5 @@
 class BiometricData:
-    def __init__(self, name, age, DoB, nationality, id_number, biometric_type, visa_number):
+    def __init__(self, id_number,name, age, DoB, nationality, biometric_type, visa_number):
         self.name = name
         self.age = age
         self.DoB = DoB
@@ -20,26 +20,26 @@ class BiometricDataManager:
             with open(self.file_path, 'r') as file:
                 for line in file:
                     data = line.strip().split(',')
-                    id_number = data[4]  # Assuming id_number is in the fifth position
-                    name = data[0]
-                    age = int(data[1])
-                    DoB = data[2]
-                    nationality = data[3]
+                    id_number = data[0]  
+                    name = data[1]
+                    age = int(data[2])
+                    DoB = data[3]
+                    nationality = data[4]
                     biometric_type = data[5]
                     visa_number = data[6]
-                    self.data[id_number] = BiometricData(name, age, DoB, nationality, id_number, biometric_type, visa_number)
+                    self.data[id_number] = BiometricData(id_number,name, age, DoB, nationality, biometric_type, visa_number)
         except FileNotFoundError:
             print("Data file not found. Starting with an empty database.")
 
     def save_data_to_file(self):
         with open(self.file_path, 'w') as file:
             for data in self.data.values():
-                file.write(f"{data.name},{data.age},{data.DoB},{data.nationality},{data.id_number},{data.biometric_type},{data.visa_number}\n")
+                file.write(f"{data.id_number},{data.name},{data.age},{data.DoB},{data.nationality},{data.biometric_type},{data.visa_number}\n")
 
     def create_Data(self, Data):
         if Data.id_number not in self.data:
             self.data[Data.id_number] = Data
-            self.save_data_to_file()  # Save to file after adding new data
+            self.save_data_to_file() 
             print(f"Biometric data added for {Data.name}")
         else:
             print(f"id number {Data.id_number} already exists in the database.")
@@ -47,7 +47,7 @@ class BiometricDataManager:
     def delete_Data(self, id_number):
         if id_number in self.data:
             del self.data[id_number]
-            self.save_data_to_file()  # Save to file after deleting data
+            self.save_data_to_file()  
             print("Biometric data deleted successfully.")
         else:
             print("id number not found in the database.")
@@ -82,9 +82,9 @@ class BiometricDataManager:
             if visa_number == "":
                 visa_number = old_data.visa_number
 
-            new_Data = BiometricData(name, age, DoB, nationality, id_number, biometric_type, visa_number)
+            new_Data = BiometricData(id_number,name, age, DoB, nationality, biometric_type, visa_number)
             self.data[id_number] = new_Data
-            self.save_data_to_file()  # Save to file after updating data
+            self.save_data_to_file()  
             print("Biometric data updated successfully.")
         else:
             print("id number not found in the database.")
@@ -115,7 +115,7 @@ class BiometricDataManager:
 
 
 def main():
-    file_path = "biometric_data.txt"  # Specify the path to your data file
+    file_path = "biometric_data.txt" 
     manager = BiometricDataManager(file_path)
 
     while True:
@@ -140,7 +140,7 @@ def main():
             nationality = input("Enter nationality: ")
             biometric_type = input("Enter biometric_type: ")
             visa_number = input("Enter visa number: ")
-            Data = BiometricData(name, age, DoB, nationality, id_number, biometric_type, visa_number)
+            Data = BiometricData( id_number,name, age, DoB, nationality, biometric_type, visa_number)
             manager.create_Data(Data)
 
         elif choice == '2':
@@ -166,7 +166,7 @@ def main():
             nationality = input("Enter nationality: ")
             biometric_type = input("Enter biometric_type: ")
             visa_number = input("Enter visa number: ")
-            enroll_data = BiometricData(name, age, DoB, nationality,id_number, biometric_type, visa_number)
+            enroll_data = BiometricData(id_number,name, age, DoB, nationality,biometric_type, visa_number)
             manager.manage_enroll_data(enroll_data)
 
         elif choice == '7':
